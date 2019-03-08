@@ -58,6 +58,10 @@ app.post("/signup", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
+  // ADMINISTRATEUR
+  const mailAdmin1 = "jeanvernus@wild.com";
+  const passwordAdmin1 = "1234";
+
   const pseudoMail = req.body.pseudoMail;
   const password = req.body.password;
 
@@ -76,12 +80,13 @@ app.post("/login", (req, res) => {
       mySQL.query(newSql, (err, results) => {
       if (results[0].password === password) {
 
-        //Si tout s'est bien passé, on envoie un statut "ok".
-        res.status(200).json('auth=true');
-        console.log("tu es connecté");
-
-        
-        
+          if(results[0].email === mailAdmin1 && results[0].password === passwordAdmin1){
+            res.status(200).json('auth=trueAdmin');
+          }
+          else {
+            res.status(200).json('auth=trueUser');
+          }
+ 
       } else {
         // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
         res.status(200).json('auth=false');
@@ -97,9 +102,21 @@ app.post("/login", (req, res) => {
 
 });
 
-// lecture bdd
+// lecture Admin
 app.get('/vioks/', (req, res) => {
   mySQL.query(`SELECT * from les_vioks`, (err, results) => {
+    if (err) {
+      console.log(err.sqlMessage);
+      res.status(500).send('Erreur lors de la récupération : ' + err.sqlMessage);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// lecture User
+app.get('/vioks/user', (req, res) => {
+  mySQL.query(newSql, (err, results) => {
     if (err) {
       console.log(err.sqlMessage);
       res.status(500).send('Erreur lors de la récupération : ' + err.sqlMessage);

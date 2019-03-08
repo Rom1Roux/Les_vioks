@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import SignUp from './SignUp';
 import LogIn from './LogIn'
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
-import User from './User'
 import axios from 'axios';
 
 
@@ -23,7 +22,7 @@ class Acceuil extends Component {
         console.log("confirmation auth : ",auth);
       })
     }
-    
+
     goSignIn=()=>{
         this.setState({ etat : 1})
     }
@@ -53,9 +52,7 @@ class Acceuil extends Component {
                     </Form>
                 </Grid.Column>
             </Grid>   
-            <div className='titreBdd'>
-                <User />
-            </div>
+            
             </div>
         )
     }
