@@ -36,6 +36,8 @@ app.listen(port, (err) => {
 // Incription formulaire
 app.post("/signup", (req, res) => {
   const lastname = req.body.lastname;
+  console.log("test boody",req.body);
+  
   const firstname = req.body.firstname;
   const pseudo = req.body.pseudo;
   const password = req.body.password;
@@ -44,13 +46,17 @@ app.post("/signup", (req, res) => {
   var sql = 'INSERT INTO les_vioks (firstname, lastname, pseudo, email, password) VALUES ('+mySQL.escape(firstname)+', '+mySQL.escape(lastname)+', '+mySQL.escape(pseudo)+', '+mySQL.escape(email)+','+mySQL.escape(password)+')';
   
   mySQL.query(sql, (err, results) => {
+    console.log("results",results);
+    console.log("errors",err);
+    
+    
     if (err) {
       // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
       console.log("erreur message", err.sqlMessage);
-      res.status(500).send("Oups, Erreur lors de la sauvegarde");
+      res.status(500).json('signupError');
     } else {
       // Si tout s'est bien passé, on envoie un statut "ok".
-      res.sendStatus(200);
+      res.status(200).json('signupValid');
     }
   })
 
