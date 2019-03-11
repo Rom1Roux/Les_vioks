@@ -4,6 +4,7 @@ const mySQL = require('./configMysql');
 const express = require('express');
 const app = express();
 
+const bcrypt = require('bcrypt');
 var cors = require('cors');
 app.use(cors());
 
@@ -40,7 +41,7 @@ app.post("/signup", (req, res) => {
   
   const firstname = req.body.firstname;
   const pseudo = req.body.pseudo;
-  const password = req.body.password;
+  const password = bcrypt.hashSync(req.body.password, 10);
   const email = req.body.email;
 
   var sql = 'INSERT INTO les_vioks (firstname, lastname, pseudo, email, password) VALUES ('+mySQL.escape(firstname)+', '+mySQL.escape(lastname)+', '+mySQL.escape(pseudo)+', '+mySQL.escape(email)+','+mySQL.escape(password)+')';
@@ -67,7 +68,6 @@ app.post("/login", (req, res) => {
   // ADMINISTRATEUR
   const mailAdmin1 = "jeanvernus@wild.com";
   const passwordAdmin1 = "1234";
-
   const pseudoMail = req.body.pseudoMail;
   const password = req.body.password;
 
@@ -84,7 +84,7 @@ app.post("/login", (req, res) => {
     if (JSON.stringify(results).indexOf('1') > 0){
       newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = ('+mySQL.escape(pseudoMail)+') OR email = ('+mySQL.escape(pseudoMail)+')';
       mySQL.query(newSql, (err, results) => {
-      if (results[0].password === password) {
+      if (bcrypt.compareSync(password, results[0].password)) {
 
           if(results[0].email === mailAdmin1 && results[0].password === passwordAdmin1){
             res.status(200).json('auth=trueAdmin');

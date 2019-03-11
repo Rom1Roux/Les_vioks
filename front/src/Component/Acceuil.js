@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SignUp from './SignUp';
 import LogIn from './LogIn'
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, NavLink, Menu } from 'react-router-dom';
 
 
 
@@ -25,15 +25,15 @@ class Acceuil extends Component {
                         <header className="App-header">
 
                             <div className="navBar">
-                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/SignUp"> Inscription </NavLink>
-                                <NavLink activeClassName="btnRed" className="btn btn-light" to="/LogIn"> Connection </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" to="/SignUp"> Inscription </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/"> Connection </NavLink>
                             </div>
                             <div><h1>Bienvenue chez les Vioks</h1></div>
                         </header>
                         <div>
                             <Switch>
-                                <Route exact path="/SignUp" component={SignUp} />
-                                <Route path="/LogIn" component={LogIn} />
+                                <Route path="/SignUp" component={SignUp} />
+                                <Route exact path="/" component={LogIn} />
                             </Switch>
                         </div>
                     </div>
