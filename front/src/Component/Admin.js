@@ -10,7 +10,8 @@ class Admin extends Component {
     this.state = {base : []};
   }
   componentDidMount = () =>{
-    axios.get(`http://192.168.15.95:5000/vioks`)
+    axios.get(`http://localhost:5000/vioks`)
+    // axios.get(`http://192.168.16.243:5000/vioks`)
       .then(res => {
         const base = res.data;
         this.setState({ base });

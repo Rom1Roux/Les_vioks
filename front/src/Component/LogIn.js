@@ -19,7 +19,8 @@ class LogIn extends Component {
     handleSubmit=(event)=>{
         event.preventDefault();
         console.log(this.state);
-        Axios.post("http://192.168.15.95:5000/login", this.state)
+        Axios.post("http://localhost:5000/login", this.state)
+        // Axios.post("http://192.168.16.243:5000/login", this.state)
         .then(res => {
             console.log(res.data);
             if(res.data === "auth=false"){

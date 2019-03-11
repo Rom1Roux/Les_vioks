@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Grid, Header, Segment, Checkbox, Input } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Checkbox} from 'semantic-ui-react'
 import Axios from 'axios';
 import Swal from 'sweetalert2'
 import Acceuil from './Acceuil';
@@ -52,7 +52,8 @@ class SignUp extends Component {
 
     clickMenu = (event) =>{
         event.preventDefault()
-        Axios.post("http://192.168.15.95:5000/signup", this.state)
+        Axios.post("http://localhost:5000/signup", this.state)
+        // Axios.post("http://192.168.16.243:5000/signup", this.state)
         .then(res => {
             console.log("res.data",res.data);
             if(res.data === "signupError"){
@@ -82,15 +83,15 @@ class SignUp extends Component {
         return (
             <div className='titreBdd'>
             
-            <Grid  textAlign='left' style={{ height: '100%' }} verticalAlign='middle'>
-            <Grid.Column style={{ maxWidth: 1000 }}>
+            <Grid  textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
+            <Grid.Column textAlign='left' style={{ maxWidth: 1000 }}>
                 <Header as='h2' color='teal' textAlign='center'>
                 Viens voir les Vioks
             </Header>
                 <Form size='large'>
                 <Segment stacked>   
 
-                    <Form.Group widths='equal'>
+                    <Form.Group  widths='equal'>
                         <Form.Input onChange={this.inputFirstName}  fluid icon='user' label='Prénom' type="text" name="firstname"/>
                         <Form.Input onChange={this.inputLastName} fluid icon='user' label='Nom' type="text" name="lastname"/>
                         <Form.Input onChange={this.inputPseudo} fluid icon='user secret' label='Pseudo' type="text" name="pseudo"/>

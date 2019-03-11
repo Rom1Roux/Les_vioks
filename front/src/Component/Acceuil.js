@@ -16,7 +16,8 @@ class Acceuil extends Component {
         }
     }
     componentDidMount =()=>{
-        axios.get(`http://192.168.15.95:5000/auth`)
+        axios.get(`http://localhost:5000/auth`)
+        // axios.get(`http://192.168.16.243:5000/auth`)
       .then(res => {
         const auth = res;
         console.log("confirmation auth : ",auth);
