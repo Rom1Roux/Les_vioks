@@ -4,7 +4,7 @@ import Axios from 'axios';
 import User from './User';
 import Admin from './Admin';
 import Swal from 'sweetalert2';
-//import Acceuil from './Acceuil';
+import Acceuil from './Acceuil';
 
 
 class LogIn extends Component {
@@ -19,7 +19,7 @@ class LogIn extends Component {
     handleSubmit=(event)=>{
         event.preventDefault();
         console.log(this.state);
-        Axios.post("http://localhost:5000/login", this.state)
+        Axios.post("http://192.168.15.95:5000/login", this.state)
         .then(res => {
             console.log(res.data);
             if(res.data === "auth=false"){
@@ -53,11 +53,11 @@ class LogIn extends Component {
 
 
     render(){
-        // if (this.state.user === 3){
-        //     return(
-        //         <Acceuil/>
-        //     )
-        // }
+        if (this.state.user === 3){
+            return(
+                <Acceuil/>
+            )
+        }
     
         if (this.state.user === 2){
             return (
@@ -90,7 +90,7 @@ class LogIn extends Component {
                     <Header as='h2' color='teal' textAlign='center'>
                     Viens voir les Vioks
                 </Header>
-                <Form onSubmit= {this.handleSubmit}size='large' action="localhost:5000/login" method="post">
+                <Form onSubmit= {this.handleSubmit}size='large' action="http://192.168.15.95:5000/login" method="post">
                 <Segment stacked>
 
                 <Form.Input fluid icon='user' iconPosition='left' placeholder='vioks@wild.com ou SuperViok' label = "Pseudo ou mail" className="inputPseudo" type="text" name="pseudoMail" onChange={this.handleChange}/>

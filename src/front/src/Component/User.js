@@ -10,7 +10,7 @@ class User extends Component {
     this.state = {base : []};
   }
   componentDidMount = () =>{
-    axios.get(`http://localhost:5000/vioks/user`)
+    axios.get(`http://192.168.15.95:5000/vioks/user`)
       .then(res => {
         const base = res.data;
         this.setState({ base });

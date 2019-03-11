@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Form, Grid, Header, Segment, Checkbox,  } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Checkbox, Input } from 'semantic-ui-react'
 import Axios from 'axios';
 import Swal from 'sweetalert2'
-// import Acceuil from './Acceuil';
+import Acceuil from './Acceuil';
 
 
 // import Swal from 'sweetalert2';
@@ -52,7 +52,7 @@ class SignUp extends Component {
 
     clickMenu = (event) =>{
         event.preventDefault()
-        Axios.post("http://localhost:5000/signup", this.state)
+        Axios.post("http://192.168.15.95:5000/signup", this.state)
         .then(res => {
             console.log("res.data",res.data);
             if(res.data === "signupError"){
@@ -65,12 +65,6 @@ class SignUp extends Component {
             }
             else if(res.data === "signupValid"){
                 this.setState({etat: 1});
-                Swal.fire({
-                    type: 'success',
-                    title: 'Vous êtes inscrit',
-                    text: 'Entre chez les Vioks',
-                    footer: '<a href>a tes risques et perils</a>'
-                  })
             }
         })
     }
@@ -78,25 +72,18 @@ class SignUp extends Component {
     
     render() {
 
-        // if (this.state.etat === 1){
-        //     return(
-        //         <Acceuil/>
-        //     )
-        // }
-        // if (this.inputPassword !== this.inputVerifPassword) {
+        if (this.state.etat === 1){
+            return(
+                <Acceuil/>
+            )
+        }
 
-        //             Swal.fire({
-        //                 type: "error",
-        //                 title: "Oops...",
-        //                 text: "Mauvais mot de passe"
-        //             })
-        //         }
         
         return (
             <div className='titreBdd'>
             
-            <Grid  textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
-            <Grid.Column textAlign='left' style={{ maxWidth: 1000 }}>
+            <Grid  textAlign='left' style={{ height: '100%' }} verticalAlign='middle'>
+            <Grid.Column style={{ maxWidth: 1000 }}>
                 <Header as='h2' color='teal' textAlign='center'>
                 Viens voir les Vioks
             </Header>

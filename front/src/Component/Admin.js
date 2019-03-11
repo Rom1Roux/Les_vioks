@@ -4,13 +4,13 @@ import axios from 'axios';
 import {Header} from 'semantic-ui-react'
 
 
-class User extends Component {
+class Admin extends Component {
   constructor(props){
     super(props);
     this.state = {base : []};
   }
   componentDidMount = () =>{
-    axios.get(`http://localhost:5000/vioks/user`)
+    axios.get(`http://localhost:5000/vioks`)
       .then(res => {
         const base = res.data;
         this.setState({ base });
@@ -38,4 +38,4 @@ class User extends Component {
   }
 }
 
-export default User;
+export default Admin;

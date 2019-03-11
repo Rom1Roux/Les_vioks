@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Acceuil from "./Component/Acceuil"
+import Acceuil from './Component/Acceuil';
 
 class App extends Component {
   render() {
