@@ -5,11 +5,11 @@ const express = require('express');
 const app = express();
 
 const bcrypt = require('bcrypt');
-var cors = require('cors');
+const cors = require('cors');
 app.use(cors());
 
 //TOKEN
-const jwt = require('jsonwebtoken');  
+const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 
 const port = 5000;
@@ -19,16 +19,13 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 
-// //TOKEN function
-// const mySecret = 'blablabla';  
-// app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/login' ]}));  
-// app.get('/myprotectedpage', function(req, res){  
-//     var mySensitiveData = {
-//       prop1: 'Bla bla confiendential',
-//       prop2: 'Bli bli even more confidential'
-//     };
-//     res.json(mySensitiveData);
-// });
+//TOKEN function
+const jwtSecret = '1234';
+app.use(expressJwt({
+  secret: jwtSecret
+}).unless({
+  path: ['/login', '/signup']
+}));
 
 // Support JSON-encoded bodies
 app.use(express.static(__dirname + '/public'));
@@ -92,30 +89,40 @@ app.post("/login", (req, res) => {
 
   mySQL.query(sql, (err, results) => {
 
-
     if (JSON.stringify(results).indexOf('1') > 0) {
-      newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
+      const newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
       mySQL.query(newSql, (err, results) => {
         if (bcrypt.compareSync(password, results[0].password)) {
 
           if (results[0].email === mailAdmin1) {
             mySQL.query(passwordAdmin1, (err, results) => {
+              const auth = err ? 'trueUser' : 'trueAdmin';
               if (!err) {
-                res.status(200).json('auth=trueAdmin');
+               
               }
             })
+          } else {
+            res.status(200).json({
+              auth: 'trueUser',
+              token
+            });
           }
-          else {
-            res.status(200).json('auth=trueUser');
-          }
-      } else {
+           // création d'un token
+           const token = jwt.sign({
+            pseudoMail
+          }, jwtSecret);
+          res.status(200).json({
+            auth,
+            token
+          });
+        } else {
           // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-          res.status(200).json('auth=false');
+          res.status(200).json({auth : false});
           console.log("Erreur du mot de passe");
         }
       })
     } else {
-      res.status(200).json('auth=false');
+      res.status(200).json({auth : false});
       console.log("Erreur du pseudo ou du mail");
     }
   })
@@ -123,7 +130,7 @@ app.post("/login", (req, res) => {
 });
 
 // lecture Admin
-app.get('/vioks/', (req, res) => {
+app.post('/vioks/', (req, res) => {
   mySQL.query(`SELECT * from les_vioks`, (err, results) => {
     if (err) {
       console.log(err.sqlMessage);
@@ -135,7 +142,9 @@ app.get('/vioks/', (req, res) => {
 });
 
 // lecture User
-app.get('/vioks/user', (req, res) => {
+app.post('/vioks/user', (req, res) => {
+  const pseudoMail = req.body.pseudoMail;
+  const newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
   mySQL.query(newSql, (err, results) => {
     if (err) {
       console.log(err.sqlMessage);

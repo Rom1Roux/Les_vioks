@@ -26,14 +26,14 @@ class Acceuil extends Component {
 
                             <div className="navBar">
                                 <NavLink activeClassName="btnRed" className="btn btn-light" to="/SignUp"> Inscription </NavLink>
-                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/"> Connection </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/LogIn"> Connection </NavLink>
                             </div>
                             <div><h1>Bienvenue chez les Vioks</h1></div>
                         </header>
                         <div>
                             <Switch>
                                 <Route path="/SignUp" component={SignUp} />
-                                <Route exact path="/" component={LogIn} />
+                                <Route exact path="/LogIn" component={LogIn} />
                             </Switch>
                         </div>
                     </div>
