@@ -8,11 +8,27 @@ const bcrypt = require('bcrypt');
 var cors = require('cors');
 app.use(cors());
 
+//TOKEN
+const jwt = require('jsonwebtoken');  
+const expressJwt = require('express-jwt');
+
 const port = 5000;
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const axios = require ('axios');
+const axios = require('axios');
+
+
+// //TOKEN function
+// const mySecret = 'blablabla';  
+// app.use(expressJwt({ secret: mySecret }).unless({ path: [ '/login' ]}));  
+// app.get('/myprotectedpage', function(req, res){  
+//     var mySensitiveData = {
+//       prop1: 'Bla bla confiendential',
+//       prop2: 'Bli bli even more confidential'
+//     };
+//     res.json(mySensitiveData);
+// });
 
 // Support JSON-encoded bodies
 app.use(express.static(__dirname + '/public'));
@@ -37,20 +53,20 @@ app.listen(port, (err) => {
 // Incription formulaire
 app.post("/signup", (req, res) => {
   const lastname = req.body.lastname;
-  console.log("test boody",req.body);
-  
+  console.log("test boody", req.body);
+
   const firstname = req.body.firstname;
   const pseudo = req.body.pseudo;
   const password = bcrypt.hashSync(req.body.password, 10);
   const email = req.body.email;
 
-  var sql = 'INSERT INTO les_vioks (firstname, lastname, pseudo, email, password) VALUES ('+mySQL.escape(firstname)+', '+mySQL.escape(lastname)+', '+mySQL.escape(pseudo)+', '+mySQL.escape(email)+','+mySQL.escape(password)+')';
-  
+  var sql = 'INSERT INTO les_vioks (firstname, lastname, pseudo, email, password) VALUES (' + mySQL.escape(firstname) + ', ' + mySQL.escape(lastname) + ', ' + mySQL.escape(pseudo) + ', ' + mySQL.escape(email) + ',' + mySQL.escape(password) + ')';
+
   mySQL.query(sql, (err, results) => {
-    console.log("results",results);
-    console.log("errors",err);
-    
-    
+    console.log("results", results);
+    console.log("errors", err);
+
+
     if (err) {
       // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
       console.log("erreur message", err.sqlMessage);
@@ -65,45 +81,43 @@ app.post("/signup", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  // ADMINISTRATEUR
+  // Admin
   const mailAdmin1 = "jeanvernus@wild.com";
-  const passwordAdmin1 = "1234";
+  const passwordAdmin1 = 'SELECT password FROM `les_vioks` WHERE email = (' + mySQL.escape(mailAdmin1) + ')';
+
   const pseudoMail = req.body.pseudoMail;
   const password = req.body.password;
 
-  var sql = 'SELECT COUNT(*) FROM `les_vioks` WHERE pseudo = ('+mySQL.escape(pseudoMail)+') OR email = ('+mySQL.escape(pseudoMail)+')';
-  
-  mySQL.query(sql, (err, results) => {
-    // console.log("erreur : ", err.sql);
-    // console.log("password base de donnée : ", results[0].password);
-    // console.log("password input : ", password);
-    // console.log("base de donnée : ", results[0]);
-    // console.log("erreur", err);
-    // console.log("recherche resykt", JSON.stringify(results).indexOf('1') )
-    
-    if (JSON.stringify(results).indexOf('1') > 0){
-      newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = ('+mySQL.escape(pseudoMail)+') OR email = ('+mySQL.escape(pseudoMail)+')';
-      mySQL.query(newSql, (err, results) => {
-      if (bcrypt.compareSync(password, results[0].password)) {
+  var sql = 'SELECT COUNT(*) FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
 
-          if(results[0].email === mailAdmin1 && results[0].password === passwordAdmin1){
-            res.status(200).json('auth=trueAdmin');
+  mySQL.query(sql, (err, results) => {
+
+
+    if (JSON.stringify(results).indexOf('1') > 0) {
+      newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
+      mySQL.query(newSql, (err, results) => {
+        if (bcrypt.compareSync(password, results[0].password)) {
+
+          if (results[0].email === mailAdmin1) {
+            mySQL.query(passwordAdmin1, (err, results) => {
+              if (!err) {
+                res.status(200).json('auth=trueAdmin');
+              }
+            })
           }
           else {
             res.status(200).json('auth=trueUser');
           }
- 
       } else {
-        // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-        res.status(200).json('auth=false');
-        console.log("Erreur du mot de passe");
-      }
-    })
+          // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
+          res.status(200).json('auth=false');
+          console.log("Erreur du mot de passe");
+        }
+      })
+    } else {
+      res.status(200).json('auth=false');
+      console.log("Erreur du pseudo ou du mail");
     }
-      else {
-        res.status(200).json('auth=false');
-        console.log("Erreur du pseudo ou du mail");
-      }
   })
 
 });

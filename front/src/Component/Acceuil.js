@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SignUp from './SignUp';
 import LogIn from './LogIn'
-import { BrowserRouter, Switch, Route, NavLink, Menu } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
 
 
 
