@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SignUp from './SignUp';
 import LogIn from './LogIn'
 import { BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
-
+import User from './User'
 
 
 
@@ -34,6 +34,7 @@ class Acceuil extends Component {
                             <Switch>
                                 <Route path="/SignUp" component={SignUp} />
                                 <Route exact path="/LogIn" component={LogIn} />
+                                <Route exact path="/User" component={User} />
                             </Switch>
                         </div>
                     </div>

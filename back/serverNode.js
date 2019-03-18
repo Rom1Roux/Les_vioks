@@ -18,6 +18,8 @@ const bodyParser = require('body-parser');
 
 const axios = require('axios');
 
+const mailAdmin1 = "jeanvernus@wild.com";
+
 
 //TOKEN function
 const jwtSecret = '1234';
@@ -78,9 +80,7 @@ app.post("/signup", (req, res) => {
 
 // Login
 app.post("/login", (req, res) => {
-  // Admin
-  const mailAdmin1 = "jeanvernus@wild.com";
-  const passwordAdmin1 = 'SELECT password FROM `les_vioks` WHERE email = (' + mySQL.escape(mailAdmin1) + ')';
+  // const passwordAdmin1 = 'SELECT password FROM `les_vioks` WHERE email = (' + mySQL.escape(mailAdmin1) + ')';
 
   const pseudoMail = req.body.pseudoMail;
   const password = req.body.password;
@@ -93,58 +93,51 @@ app.post("/login", (req, res) => {
       const newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
       mySQL.query(newSql, (err, results) => {
         if (bcrypt.compareSync(password, results[0].password)) {
-
-          if (results[0].email === mailAdmin1) {
-            mySQL.query(passwordAdmin1, (err, results) => {
-              const auth = err ? 'trueUser' : 'trueAdmin';
-              if (!err) {
-               
-              }
-            })
-          } else {
-            res.status(200).json({
-              auth: 'trueUser',
-              token
-            });
-          }
-           // création d'un token
-           const token = jwt.sign({
+          const token = jwt.sign({
             pseudoMail
           }, jwtSecret);
           res.status(200).json({
-            auth,
+            auth : true,
             token
           });
-        } else {
+
+        } 
+        else {
           // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-          res.status(200).json({auth : false});
+          res.status(200).json({
+            auth: false
+          });
           console.log("Erreur du mot de passe");
         }
       })
-    } else {
-      res.status(200).json({auth : false});
+    } 
+    else {
+      res.status(200).json({
+        auth: false
+      });
       console.log("Erreur du pseudo ou du mail");
     }
   })
 
 });
 
-// lecture Admin
-app.post('/vioks/', (req, res) => {
-  mySQL.query(`SELECT * from les_vioks`, (err, results) => {
-    if (err) {
-      console.log(err.sqlMessage);
-      res.status(500).send('Erreur lors de la récupération : ' + err.sqlMessage);
-    } else {
-      res.json(results);
-    }
-  });
-});
+// // lecture Admin
+// app.post('/vioks/', (req, res) => {
+//   mySQL.query(`SELECT * from les_vioks`, (err, results) => {
+//     if (err) {
+//       console.log(err.sqlMessage);
+//       res.status(500).send('Erreur lors de la récupération : ' + err.sqlMessage);
+//     } else {
+//       res.json(results);
+//     }
+//   });
+// });
 
 // lecture User
 app.post('/vioks/user', (req, res) => {
-  const pseudoMail = req.body.pseudoMail;
-  const newSql = 'SELECT * FROM `les_vioks` WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')';
+  const { pseudoMail } = req.body; // c'est un tres bon developpeur
+  const myWhere = pseudoMail === mailAdmin1 ? "" : 'WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')'
+  const newSql = 'SELECT * FROM `les_vioks` '+ myWhere;
   mySQL.query(newSql, (err, results) => {
     if (err) {
       console.log(err.sqlMessage);
