@@ -16,16 +16,16 @@ class Acceuil extends Component {
                     <div className="App">
                         <header className="App-header">
                             <div className="navBar">
-                                <NavLink activeClassName="btnRed" className="btn btn-light" to="/SignUp"> Inscription </NavLink>
-                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/LogIn"> Connection </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" to="/signup"> Inscription </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/login"> Connection </NavLink>
                             </div>
                             <div><h1>Bienvenue chez les Vioks</h1></div>
                         </header>
                         <div>
                             <Switch>
-                                <Route path="/SignUp" component={SignUp} />
-                                <Route exact path="/LogIn" component={LogIn} />
-                                <Route exact path="/User" component={User} />
+                                <Route path="/signup" component={SignUp} />
+                                <Route exact path="/login" component={LogIn} />
+                                <Route exact path="/user" component={User} />
                             </Switch>
                         </div>
                     </div>

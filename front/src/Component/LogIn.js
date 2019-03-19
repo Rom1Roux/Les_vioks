@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
 import Axios from 'axios';
 import Swal from 'sweetalert2';
@@ -9,7 +10,6 @@ class LogIn extends Component {
         this.state = {
             password: "",
             pseudoMail: "",
-            user: 0 // user 0 = non / user 1 = user / user 2 = admin
         }
     }
     handleSubmit = (event) => {
@@ -18,6 +18,13 @@ class LogIn extends Component {
         Axios.post("http://localhost:5000/login", this.state)
             .then(res => {
                 console.log(res.data);
+                this.props.dispatch(
+                    {
+                        type: "CREATE_TOKEN",
+                        pseudoMail: this.state.pseudoMail,
+                        token: res.data.token
+                    }
+                )
                 if (res.data.auth === false) {
                     Swal.fire({
                         type: 'error',
@@ -25,12 +32,10 @@ class LogIn extends Component {
                         text: 'Profil introuvable',
                         footer: '<a href>Retente ta chance</a>'
                     })
-                    this.setState({ user: 0 });
                 }
                 if (res.data.auth === true) {
-                    this.setState({ user: 1 });
-                    localStorage.setItem('monToken', res.data.token);
-                    localStorage.setItem('pseudoMail', this.state.pseudoMail);
+                    // localStorage.setItem('monToken', res.data.token);
+                    // localStorage.setItem('pseudoMail', this.state.pseudoMail);
                     this.props.history.push('/user');
                 }
             })
@@ -39,9 +44,7 @@ class LogIn extends Component {
         console.log(event.target.name);
         this.setState({ [event.target.name]: event.target.value })
     }
-    clickMenu = () => {
-        this.setState({ user: 3 })
-    }
+
     render() {
         return (
             <div className='titreBdd'>
@@ -61,4 +64,5 @@ class LogIn extends Component {
         )
     }
 }
-export default LogIn;
+
+export default connect()(LogIn);

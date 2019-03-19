@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import Tables from '../Class/Tables';
 import axios from 'axios';
 import { Header } from 'semantic-ui-react'
+import { connect } from 'react-redux';
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = { base: [] };
+
   }
   componentDidMount = () => {
+    console.log("constructor", this.props.flash);
     axios.post(`http://localhost:5000/vioks/user`,
-      { pseudoMail: localStorage.getItem("pseudoMail") },
-      { headers: { 'Authorization': 'Bearer ' + localStorage.getItem("monToken") } })
+      { pseudoMail: this.props.pseudoMail },
+      { headers: { 'Authorization': 'Bearer ' + this.props.flash } })
       .then(res => {
         const base = res.data;
         this.setState({ base });
@@ -29,4 +32,9 @@ class User extends Component {
     );
   }
 }
-export default User;
+const mapStateToProps = (store) =>
+  ({
+    flash: store.auth.token,
+    pseudoMail: store.auth.pseudoMail,
+  });
+export default connect(mapStateToProps)(User);
