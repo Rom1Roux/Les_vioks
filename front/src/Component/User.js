@@ -3,7 +3,6 @@ import Tables from '../Class/Tables';
 import axios from 'axios';
 import { Header } from 'semantic-ui-react'
 
-
 class User extends Component {
   constructor(props) {
     super(props);
@@ -19,25 +18,15 @@ class User extends Component {
         console.log("base de donnée client : ", base);
       })
   }
-
   render() {
     return (
-
       <div>
-        <Header as='h2' color='teal' textAlign='center'>
-          Ci dessous, des sacrés Vioks
-            </Header>
+        <Header as='h2' color='teal' textAlign='center'>Ci dessous, des sacrés Vioks</Header>
         {this.state.base.map(x =>
-          <Tables firstname={x.firstname}
-            lastname={x.lastname}
-            pseudo={x.pseudo}
-            email={x.email}
-          />
+          <Tables firstname={x.firstname} lastname={x.lastname} pseudo={x.pseudo} email={x.email} />
         )}
       </div>
-
     );
   }
 }
-
 export default User;

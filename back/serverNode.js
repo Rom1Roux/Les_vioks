@@ -60,12 +60,9 @@ app.post("/signup", (req, res) => {
   const email = req.body.email;
 
   var sql = 'INSERT INTO les_vioks (firstname, lastname, pseudo, email, password) VALUES (' + mySQL.escape(firstname) + ', ' + mySQL.escape(lastname) + ', ' + mySQL.escape(pseudo) + ', ' + mySQL.escape(email) + ',' + mySQL.escape(password) + ')';
-
   mySQL.query(sql, (err, results) => {
     console.log("results", results);
     console.log("errors", err);
-
-
     if (err) {
       // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
       console.log("erreur message", err.sqlMessage);
@@ -75,13 +72,10 @@ app.post("/signup", (req, res) => {
       res.status(200).json('signupValid');
     }
   })
-
 })
 
 // Login
 app.post("/login", (req, res) => {
-  // const passwordAdmin1 = 'SELECT password FROM `les_vioks` WHERE email = (' + mySQL.escape(mailAdmin1) + ')';
-
   const pseudoMail = req.body.pseudoMail;
   const password = req.body.password;
 
@@ -97,11 +91,10 @@ app.post("/login", (req, res) => {
             pseudoMail
           }, jwtSecret);
           res.status(200).json({
-            auth : true,
+            auth: true,
             token
           });
-
-        } 
+        }
         else {
           // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
           res.status(200).json({
@@ -110,7 +103,7 @@ app.post("/login", (req, res) => {
           console.log("Erreur du mot de passe");
         }
       })
-    } 
+    }
     else {
       res.status(200).json({
         auth: false
@@ -121,23 +114,11 @@ app.post("/login", (req, res) => {
 
 });
 
-// // lecture Admin
-// app.post('/vioks/', (req, res) => {
-//   mySQL.query(`SELECT * from les_vioks`, (err, results) => {
-//     if (err) {
-//       console.log(err.sqlMessage);
-//       res.status(500).send('Erreur lors de la récupération : ' + err.sqlMessage);
-//     } else {
-//       res.json(results);
-//     }
-//   });
-// });
-
-// lecture User
+// lecture Bd User ou Admin 
 app.post('/vioks/user', (req, res) => {
   const { pseudoMail } = req.body; // c'est un tres bon developpeur
   const myWhere = pseudoMail === mailAdmin1 ? "" : 'WHERE pseudo = (' + mySQL.escape(pseudoMail) + ') OR email = (' + mySQL.escape(pseudoMail) + ')'
-  const newSql = 'SELECT * FROM `les_vioks` '+ myWhere;
+  const newSql = 'SELECT * FROM `les_vioks` ' + myWhere;
   mySQL.query(newSql, (err, results) => {
     if (err) {
       console.log(err.sqlMessage);

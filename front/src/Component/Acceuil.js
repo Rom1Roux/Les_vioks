@@ -4,26 +4,17 @@ import LogIn from './LogIn'
 import { BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
 import User from './User'
 
-
-
 class Acceuil extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            
-
-        }
+        this.state = {}
     }
-
-    render() {
-      
+    render() {      
         return (
             <div>
                 <BrowserRouter>
-
                     <div className="App">
                         <header className="App-header">
-
                             <div className="navBar">
                                 <NavLink activeClassName="btnRed" className="btn btn-light" to="/SignUp"> Inscription </NavLink>
                                 <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/LogIn"> Connection </NavLink>
@@ -38,9 +29,7 @@ class Acceuil extends Component {
                             </Switch>
                         </div>
                     </div>
-
-                </BrowserRouter>
-                
+                </BrowserRouter>            
            </div>
         )
     }
