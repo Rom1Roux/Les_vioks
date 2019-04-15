@@ -1,62 +1,36 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import SignUp from './SignUp';
 import LogIn from './LogIn'
-import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
+import { BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';
 import User from './User'
-import axios from 'axios';
-
-
 
 class Acceuil extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state ={
-            etat : 0,
-            auth : false
-
-        }
+        this.state = {}
     }
-    componentDidMount =()=>{
-        axios.get(`http://192.168.15.95:5000/auth`)
-      .then(res => {
-        const auth = res;
-        console.log("confirmation auth : ",auth);
-      })
-    }
-    
-    goSignIn=()=>{
-        this.setState({ etat : 1})
-    }
-    gologIn=()=>{
-        this.setState({ etat : 2})
-    }
-
-    render(){
-        if (this.state.etat === 1){
-            return <SignUp/>
-        }
-        else if (this.state.etat === 2){
-            return <LogIn/>
-        }
-        return(
-            <div className='titreBdd'>
-            <Grid color='teal'textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
-                <Grid.Column style={{ maxWidth: 500 }}>
-                    <Header as='h2' color='teal' textAlign='center'>
-                        Bienvenue chez les Vioks !!
-                    </Header>
-                    <Form size='large' className= "button">
-                        <Segment stacked>
-                            <Button  color='teal' circular  size ="massive" value="Sign'in"onClick ={this.goSignIn}>Inscription</Button>
-                            <Button  color='teal' circular  size ="massive" value="Log'in" onClick={this.gologIn}> Connexion</Button>
-                        </Segment>
-                    </Form>
-                </Grid.Column>
-            </Grid>   
-            <div className='titreBdd'>
-                <User />
-            </div>
-            </div>
+    render() {      
+        return (
+            <div>
+                <BrowserRouter>
+                    <div className="App">
+                        <header className="App-header">
+                            <div className="navBar">
+                                <NavLink activeClassName="btnRed" className="btn btn-light" to="/signup"> Inscription </NavLink>
+                                <NavLink activeClassName="btnRed" className="btn btn-light" exact to="/login"> Connection </NavLink>
+                            </div>
+                            <div><h1>Bienvenue chez les Vioks</h1></div>
+                        </header>
+                        <div>
+                            <Switch>
+                                <Route path="/signup" component={SignUp} />
+                                <Route exact path="/login" component={LogIn} />
+                                <Route exact path="/user" component={User} />
+                            </Switch>
+                        </div>
+                    </div>
+                </BrowserRouter>            
+           </div>
         )
     }
 }

@@ -6,10 +6,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Acceuil/>
+        <Acceuil />
       </div>
     );
   }
 }
-
 export default App;
